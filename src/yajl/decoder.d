@@ -25,7 +25,7 @@ import yajl.common;
 public import std.json;
 import std.array : popBack;
 import std.conv;
-
+import core.stdc.string;
 
 /**
  * Decoder provides the method for deserializing JSON into a D object.
@@ -254,8 +254,6 @@ private:
 @trusted
 string formatStatus(yajl_handle handle, in const(char)[] json)
 {
-    import std.c.string : strlen;
-
     auto msg = yajl_get_error(handle, 1, cast(const(ubyte)*)json.ptr, json.length);
     scope(exit) { yajl_free_error(handle, msg); }
 
@@ -314,8 +312,6 @@ extern(C)
     {
         static bool checkFloatFormat(const(char)* b, size_t l)
         {
-            import std.c.string;
-
             return memchr(b, '.', l) ||
                    memchr(b, 'e', l) ||
                    memchr(b, 'E', l);
